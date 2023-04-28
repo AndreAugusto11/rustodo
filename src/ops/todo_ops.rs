@@ -3,8 +3,7 @@ use crate::args::{
   TodoSubcommand,
   CreateTodo,
   DeleteTodo,
-  CompleteTodo,
-  ShowTodos
+  ShowTodos, UpdateTodo
 };
 
 use crate::models::{NewTodo, Todo};
@@ -20,8 +19,8 @@ pub fn handle_todo_command(todo: TodoCommand) {
       TodoSubcommand::Delete(todo) => {
           delete_todo(todo);
       }
-      TodoSubcommand::Complete(todo) => {
-        complete_todo(todo);
+      TodoSubcommand::Update(todo) => {
+        update_todo(todo);
       },
       TodoSubcommand::Show(todo) => {
           show_todos(todo);
@@ -73,19 +72,23 @@ pub fn show_todos(todo: ShowTodos) {
   }
 }
 
-pub fn complete_todo(todo: CompleteTodo) {
-    println!("Completing todo: {:?}", todo);
+pub fn update_todo(todo: UpdateTodo) {
+    println!("Updating todo: {:?}", todo);
     println!("Not implemented");
-    // use crate::schema::todos::dsl::*;
+    use crate::schema::todos::dsl::*;
 
-    // let connection = establish_connection();
+    let connection = establish_connection();
 
-    // let db_todo = IgnoreNoneFieldsUpdateUser {
-    //     completed: true,
-    // };
+    let db_todo = Todo {
+      id: todo.id,
+      title: todo.title,
+      description: todo.description,
+      user_id: todo.user_id,
+      completed: true
+    };
     
-    // diesel::update(&db_todo)
-    //     .set(completed.eq(true))
-    //     .execute(&connection)
-    //     .expect("Error updating todo");
+    diesel::update(todos.find(todo.id))
+        .set(&db_todo)
+        .execute(&connection)
+        .expect("Error updating todo");
 }

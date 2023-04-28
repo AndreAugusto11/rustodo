@@ -27,13 +27,11 @@ pub struct UserCommand {
     pub command: UserSubcommand,
 }
 
-
 #[derive(Debug, Args)]
 pub struct TodoCommand {
     #[clap(subcommand)]
     pub command: TodoSubcommand,
 }
-
 
 #[derive(Debug, Subcommand)]
 pub enum UserSubcommand {
@@ -55,8 +53,8 @@ pub enum TodoSubcommand {
     /// Delete a todo
     Delete(DeleteTodo),
 
-    /// Delete a todo
-    Complete(CompleteTodo),
+    /// Update a todo
+    Update(UpdateTodo),
 
     /// Show all todos
     Show(ShowTodos),
@@ -80,10 +78,10 @@ pub struct DeleteUser {
 
 #[derive(Debug, Args)]
 pub struct CreateTodo {
-    /// The title of the video to create
+    /// The title of the todo to create
     pub title: String,
 
-    /// The description of the video to create
+    /// The description of the todo to create
     pub description: String,
 
     /// The user that creates the to do
@@ -97,12 +95,21 @@ pub struct DeleteTodo {
 }
 
 #[derive(Debug, Args)]
-pub struct CompleteTodo {
-    /// The id of the entity to mark as complete
-    pub id: i32,
+pub struct ShowTodos {
+    pub user_id: i32,
 }
 
 #[derive(Debug, Args)]
-pub struct ShowTodos {
+pub struct UpdateTodo {
+    /// The id of the todo to update
+    pub id: i32,
+
+    /// The title of the todo to update
+    pub title: String,
+
+    /// The description of the todo to update
+    pub description: String,
+
+    /// The user that updates the to do
     pub user_id: i32,
 }
